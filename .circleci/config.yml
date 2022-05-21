@@ -165,8 +165,8 @@ jobs:
       - run:
           name: Back-end Scan
           command: |
-             cd backend
-             npm install
+            cd backend
+            npm install
             #  npm audit fix --force --audit-level=critical
             #  npm audit fix --force 
              npm audit --audit-level=critical
@@ -428,10 +428,10 @@ workflows:
           requires: [build-frontend]
       - test-backend:
           requires: [build-backend]
-      # - scan-backend:
-      #     requires: [build-backend]
-      # - scan-frontend:
-      #     requires: [build-frontend]
+      - scan-backend:
+          requires: [build-backend]
+      - scan-frontend:
+          requires: [build-frontend]
       # - notify_on_success:
       #     requires: [build-frontend , build-backend , test-frontend, test-backend, scan-backend , scan-frontend ]     
       # - deploy-infrastructure:
