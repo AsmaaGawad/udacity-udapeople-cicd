@@ -52,25 +52,25 @@ commands:
               aws cloudformation delete-stack --stack-name udapeople-backend-<<parameters.workflow_id>>
               aws cloudformation delete-stack --stack-name udapeople-frontend-<<parameters.workflow_id>>
               # aws s3 rm s3://udapeople-<<parameters.workflow_id>> --recursive
-#     revert-migrations:
-#       description: Reverting last migration if successfully run in the current workflow.
-#       parameters:
-#         workflow_id:
-#           type: string 
-#           default: ${CIRCLE_WORKFLOW_ID:0:7}
-#       steps:
-#         - run:
-#             name: Revert migrations
-#             when: on_fail
-#             command: |
-#                 SUCCESS=$(curl  https://kvdb.io/5oAmKsszTQkqjgXFAxDihS/migration_<< parameters.workflow_id >>)
-#                 # Logic for reverting the database state
-#                 if (( $SUCCESS == 1 ));
-#                 then
-#                     cd ~/project/backend/
-#                     npm install
-#                     npm run migration:revert
-#                 fi  
+    revert-migrations:
+      description: Reverting last migration if successfully run in the current workflow.
+      parameters:
+        workflow_id:
+          type: string 
+          default: ${CIRCLE_WORKFLOW_ID:0:7}
+      steps:
+        - run:
+            name: Revert migrations
+            when: on_fail
+            command: |
+                SUCCESS=$(curl  https://kvdb.io/5oAmKsszTQkqjgXFAxDihS/migration_<< parameters.workflow_id >>)
+                # Logic for reverting the database state
+                if (( $SUCCESS == 1 ));
+                then
+                    cd ~/project/backend/
+                    npm install
+                    npm run migration:revert
+                fi  
 
             
 jobs:
@@ -210,24 +210,24 @@ jobs:
       # Here's where you will add some code to rollback on failure   
       - destroy-environment   
 
-  # configure-infrastructure:
-  #   docker:
-  #     - image: cimg/base:2022.04
-  #   steps:
-  #     - checkout
-  #     - install_ansible
-  #     - add_ssh_keys:
-  #         fingerprints: [ "a7:fc:5c:ca:09:2a:42:ad:bc:34:d2:25:cf:9d:8a:43" ]
-  #     - attach_workspace:
-  #         at: ~/
-  #     - run:
-  #         name: Configure server
-  #         command: |
-  #           cd .circleci/ansible
-  #           cat inventory.txt
-  #           sudo apt install -y nano
-  #           ansible-playbook -i inventory.txt configure-server.yml      
-  #     - destroy-environment   
+  configure-infrastructure:
+    docker:
+      - image: cimg/base:2022.04
+    steps:
+      - checkout
+      - install_ansible
+      - add_ssh_keys:
+          fingerprints: [ "40:6e:cc:03:b2:1e:95:4b:01:a0:93:55:ae:82:9b:1c" ]
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Configure server
+          command: |
+            cd .circleci/ansible
+            cat inventory.txt
+            sudo apt install -y nano
+            ansible-playbook -i inventory.txt configure-server.yml      
+      - destroy-environment   
   # run-migrations:
   #   docker:
   #     - image: cimg/node:13.8.0
