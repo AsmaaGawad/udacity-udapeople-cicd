@@ -34,7 +34,8 @@ Resources:
         - Key: Name
           Value: !Sub backend-${ID}
   MyEIP:
-    Type: AWS::EC2::EIP
-    Properties:
+    Type: AWS::EC2::EIPAssociation
+    Properties: 
+      AllocationId: eipalloc-07b7f8bb69168c83c
       InstanceId: !Ref EC2Instance
-      EIP: 35.83.145.11
+     
